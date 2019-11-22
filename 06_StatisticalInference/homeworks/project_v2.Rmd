@@ -1,0 +1,218 @@
+---
+title: "Peer-graded Assignment: Statistical Inference Course Project"
+author: "Santiago Ruiz Navas"
+date: "11/12/2019"
+output: html_document
+---
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(ggplot2)
+library(gridExtra)
+# Running the simulations
+# the would be to 1000 times calculate the average of forthy samples of the exponential distribution.
+theoretical.lambda <- 0.2
+theoretical.mean <- 1/theoretical.lambda# 5
+mns  <- vector("numeric",1000)
+for (i in 1 : 1000) mns[i] = mean(rexp(n = 40,rate = theoretical.lambda))
+
+sample.mean     <- mean(mns)
+sample.lambda   <- 1/sample.mean
+############################################################################
+## first point comparing the theoretical mean against the simulated means.## 
+############################################################################
+############################################################################
+##                   second point comparing variances.                    ## 
+############################################################################
+sample.var      <- 1/sample.lambda^2
+theoretical.var <- 1/theoretical.lambda^2
+### analysis, almost the same
+
+exponential <- rexp(n = 1000,rate = theoretical.lambda)
+g.exp = ggplot(data.frame(Exponential = exponential), aes(x= Exponential))
+g.exp = g.exp+geom_histogram(color = "black", fill = "lightblue", binwidth = 0.05 )
+
+g.exp.var =g.exp +geom_vline(xintercept = theoretical.mean + sqrt(theoretical.var), size = 1, colour = "red")
+g.exp.var =g.exp.var +geom_vline(xintercept = theoretical.mean - sqrt(theoretical.var), size = 1, colour = "red")
+g.exp.var =g.exp.var +geom_vline(xintercept = theoretical.mean - sqrt(theoretical.var), size = 1, colour = "red")
+g.exp.var =g.exp.var +geom_vline(xintercept = theoretical.mean + sqrt(sample.var), size = 1, colour = "blue")
+g.exp.var =g.exp.var +geom_vline(xintercept = theoretical.mean - sqrt(sample.var), size = 1, colour = "blue")
+g.exp.var =g.exp.var+labs(title = "Theoretical vs Simulated Variance",
+             subtitle ="lambda  =  0.2")
+
+g.exp.mean = g.exp+ geom_vline(xintercept = theoretical.mean, size = 1, colour = "red")
+g.exp.mean = g.exp+ geom_vline(xintercept = sample.mean, size = 1, colour = "red")
+g.exp.mean =g.exp.mean+labs(title = "Theoretical vs Simualted Mean",
+             subtitle ="lambda  =  0.2")
+
+g.mean = ggplot(data.frame(means = mns), aes(x= means))
+g.mean = g.mean+geom_histogram(color = "black", fill = "lightblue", binwidth = 0.05 )
+g.mean = g.mean+geom_vline(xintercept = sample.mean, size = 1, colour = "red")
+g.mean = g.mean+labs(title = "Simulated mean",
+                     subtitle =paste("u =",sample.mean,"\nsigma =",sample.var))
+
+g.var = ggplot(data.frame(means = mns), aes(x= means))
+g.var = g.var+geom_histogram(color = "black", fill = "lightblue", binwidth = 0.05 )
+g.var = g.var+geom_vline(xintercept = sample.mean + sqrt(sample.var), size = 1, colour = "red")
+g.var = g.var+geom_vline(xintercept = sample.mean - sqrt(sample.var), size = 1, colour = "red")
+g.var = g.var+labs(title = "Simulated variance",
+                     subtitle =paste("u =",sample.mean,"\nsigma =",sample.var))
+#g
+### analysis
+# The simulated mean converged really close to the theoretical, Therefore, the simulated 40 averages of the exponential distributions drawn in this plot comply with the premises of the CTL. 
+
+############################################################################
+##                   third point comparing distributions.                 ## 
+############################################################################
+exponential <- rexp(n = 1000,rate = theoretical.lambda)
+g1 = ggplot(data.frame(Exponential = exponential), aes(x= Exponential))
+g1 = g1+geom_histogram(color = "black", fill = "lightblue", binwidth = 0.05 )
+g1 = g1+labs(title = "PART 1 Simulation - Graph 1",
+             subtitle ="Exponential distribution")
+
+g2 = ggplot(data.frame(Means = mns), aes(x= Means))
+g2 = g2+geom_histogram(color = "black", fill = "lightblue", binwidth = 0.05 )
+g2 = g2+labs(title = "PART 1 Simulation - Graph 2",
+                subtitle ="Distribution of the averages of 40 exponentials")
+
+#grid.arrange(g1, g2, nrow = 1)
+### Analysis
+# The two graphs show a explicit differences between the distributions. 
+# Graph one shows 1000 samples of an exponential distribution with lambda 0.2
+# Graph two shows 1000 averages of 40 points of a exponential distribution with lambda 0.2. 
+# From these two graphs it is possible to see that graph two resembles an normal distrubution as indicated by the CTL.
+
+#--------------------------------------------------------------------------------------------------------------------
+# PART 2 - Basic Inferential Data Analysis Instructions
+#--------------------------------------------------------------------------------------------------------------------
+data(ToothGrowth)
+#summary(ToothGrowth)
+#head(ToothGrowth)
+#ToothGrowth$dose
+# paired measures, differences between two treatments was positive or not
+## by supp
+data.VC <- subset(ToothGrowth,supp == "VC")
+data.OJ <- subset(ToothGrowth,supp == "OJ")
+
+difference <- data.VC$len-data.OJ$len
+#t.test(difference)$conf.int
+
+#Given that the samples were taken from the same patients over a 
+
+#t.test(g2, g1, paired = FALSE, var.equal = TRUE)$conf.int
+#t.test(data.VC$len, data.OJ$len, paired = FALSE, var.equal = FALSE)
+# For paired the two sided t-test at 95% provides an interval -7.57 and 0.17, the interval includes cero. Therefore, when comparing OJ and VC we fail to reject the null hipothesis and we can not conclude wether OJ or VC have an effect on tooth lenght at 95% of confidence inteval.
+
+## by dose
+data.dose1 <- subset(ToothGrowth,dose == 0.5)
+data.dose2 <- subset(ToothGrowth,dose == 1.0)
+data.dose3 <- subset(ToothGrowth,dose == 2.0)
+
+df12 <- data.dose1$len-data.dose2$len
+df13 <- data.dose1$len-data.dose3$len
+df23 <- data.dose2$len-data.dose3$len
+
+data12 <- t.test(df12, paired = FALSE, var.equal = FALSE)
+# all negative, therefore dose 2 increses with respecto to dose 1
+# t -6.9
+# p-value super small
+
+data13<- t.test(df13, paired = FALSE, var.equal = FALSE)
+# all super negative, therefore dose 3 increses with respecto to dose 1
+# t = -11.291
+# p-value = close to cero
+data23 <- t.test(df23, paired = FALSE, var.equal = FALSE)
+# t = -4.6
+# p-value = 0.00019
+# all negative, therefore dose 3 increses with respecto to dose 2
+# The dose quantity is proportional to the increase in tooth lenght
+
+# Combining the two analyses it is proposed that whit the current data, we can not say that the type of supp has an effect on tooth grwoth However, it is possible to say that the more doses there are of a treathment the longer the tooth grow. 
+
+```
+# OVERVIEW
+This document consits in two sections, part 1 and part 2 each corresponding to the points of the  Statistical Inference Course Project.
+
+# PART 1 Simulations
+## Point 1: calculating the theoretical and simulated means
+The theoretical mean was calculated by 1/lambda with lambda = 0.2. 
+```{r,theoretical.mean, echo=TRUE}
+theoretical.lambda <- 0.2
+theoretical.mean <- 1/theoretical.lambda# 5
+theoretical.mean
+```
+The simulated mean was calculated by calculating the mean of 1000 averages of 40 randomly generated samples of the exponential distribution with lambda = 0.2
+```{r,sample.mean, echo=TRUE}
+mns  <- vector("numeric",1000)
+for (i in 1 : 1000) mns[i] = mean(rexp(n = 40,rate = theoretical.lambda))
+sample.mean     <- mean(mns)
+sample.mean
+```
+## Point 2: Calculating the theoretical and simulated variance
+The theoretical variance of an exponential distribution is calcualte with 1/lambda^2
+```{r,theoretical.var, echo=TRUE}
+theoretical.var <- 1/theoretical.lambda^2
+theoretical.var
+```
+The simulated variance is calculated using the simualted mean obtained in point 1 and 1/lambda^2
+```{r,sample.var, echo=TRUE}
+sample.mean     <- mean(mns)
+sample.lambda   <- 1/sample.mean
+sample.var      <- 1/sample.lambda^2
+sample.var
+```
+### Simulated vs theoretical mean
+I present in Figure 1 the distribution of the simulated data. Also two lines, in "blue" a vertical line showing the value of the theoretical mean (5) and in "red" the simulated mean
+
+```{r g.exp.mean, g.mean, echo=FALSE}
+grid.arrange(g.exp.mean, g.mean, nrow = 1)
+```
+
+### Simulated vs theoretical variance
+Insert a data frame of the theoretical and simulated statistics and their differences
+
+```{r g.var,g.exp.var, echo=FALSE}
+grid.arrange(g.exp.var, g.var, nrow = 1)
+```
+
+### Interpretation
+The differences between the theoretical and simulated means and variances was close to cero.
+Therefore, the simulated 40 averages of the exponential distributions drawn in this plot comply with the premises of the CTL.
+
+# PART 2 Basic Inferential Data Analysis Instructions
+## Point 1 - Exploratory analysis od the data
+Did you perform an exploratory data analysis of at least a single plot or table highlighting basic features of the data?
+## Point 2 - confidence intervals for suup and doses
+Did the student perform some relevant confidence intervals and/or tests?
+### Confidence interval for suup
+Test for supp 
+VC - OJ
+```{r data.VC,data.OJ, echo=FALSE}
+t.test(data.VC$len, data.OJ$len, paired = FALSE, var.equal = FALSE)
+```
+### Interpretation of the T-test for supp
+For paired the two sided t-test at 95% provides an interval -7.57 and 0.17, the interval includes cero. Therefore, when comparing OJ and VC we fail to reject the null hipothesis and we can not conclude wether OJ or VC have an effect on tooth lenght at 95% of confidence inteval.
+
+
+### Confidence interval for dose
+### dose 1 (0.5) - dose 2 (1)  
+```{r data12, echo=FALSE}
+data12
+```
+### dose 1 (0.5) - dose 3 (2)  
+```{r data13, echo=FALSE}
+data13
+```
+### dose 2 (1) - dose 3 (2)  
+```{r data23, echo=FALSE}
+data23
+```
+### Interpretation of the t-test for dose
+Were the results of the tests and/or intervals interpreted in the context of the problem correctly?
+
+### Assumptions for this analysis 
+ - The data in the toothgrowth dataset is
+  - not paired
+  - independent 
+  - the tooth length reported for each of the doses and the type of supps have different variances
+  - the tooth length in the dataset follows a t-student distribution

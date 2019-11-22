@@ -240,7 +240,10 @@ g
 ---
 ## No effect of religion
 ```{r, echo = TRUE}
-summary(lm(Fertility ~ Agriculture, data = swiss))$coef
+g = ggplot(swiss, aes(x = Agriculture, y = Fertility, colour = factor(CatholicBin)))
+g = g + geom_point(size = 6, colour = "black") + geom_point(size = 4)
+g = g + xlab("% in Agriculture") + ylab("Fertility")
+g
 ```
 
 ---

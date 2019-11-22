@@ -1,0 +1,17 @@
+GEneral note: Z standardized, normal distributed quantiles. T is Tdistributed quantiles or tests. 
+- values are the most common measure of statistical significance.
+- the are a proxi of how unusual is the result we got if the null hypothesis is true.
+ -evidence here in terms of the test statistic, so it's the probability of obtaining a test statistic as or more extreme in favor of the alternative than was actually obtained.
+ - If p is small, it might mean that the null hipo is true and we observed a rare event or the null is false. 
+ - Es la probabilidad de obtener el valor estimado usando la distribucion original.
+ - software por defecto hacen el valor p a los dos lados. 
+ - P-value is an extremely convenient test statistic to communicate to people, because when you give it to them, they decide wether to accept it or not. 
+ - Translate everytime thei tell you p-value is the number of standard deviations from the null hipothesis of your estimate. it is an already calculated thing!! it is not a property of a distribution it is an statistic. 
+
+BINARY:
+ - you play your hipothesis, you calculate the prob of the hipo, then according to the probability it gives you you decide wether to accept or reject. 
+ - the p-value would be to calculate the two single p-values. Take the smaller one and double it. 
+Poisson
+ - if you want the upper tail in R, ppois, you have to take the number down by one (number of occurrences). 
+
+ - to the right of the P-value is the attained level of significance and to the left is the prob with respect to the normal of it happening or (alpha level). 

@@ -1,0 +1,21 @@
+Hypothesis testing is concerned with making decisions using data
+type I error, decide true but was false
+type II error decide false and it was true
+
+The default setting is the null hipothesis is the standard and our hipo is the one that requires evidence. 
+the type I error is represented by alfa and it is set to 0.5 
+Then using the default dataset you calculate the quantile 1 and get the value, that will be the threshold.
+It is like interpreting the quntile as how normal a value is, if it is not likely to be normal then it could be different than the null hipothesis. the null hipothesis is like the control, like the dummmy. liek as it is.  
+The range is calculated in terms of standard deviations from the mean. if it is bigger than 1.695 then uuu. 
+
+You can also do two sided tests. It is changing the quantile to .975 so you distribute the .25 bellow and .25 above. Then do the calculations. 
+
+the t-statistic is the ratio of the departure of the estimated value of a parameter from its hypothesized value to its standard error.
+(sample mean  - estimated mean)/s/sqrt(n)
+
+Two group testing. 
+same as before, but calculating 
+
+
+- General rule for rejection in a normal distribution case - sqrt(n) * ( X' - mu) / s > Z_{1-alpha}.
+ - if ho holds then we say,  we say that we "fail to reject H_0"

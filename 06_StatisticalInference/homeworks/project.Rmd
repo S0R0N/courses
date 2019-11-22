@@ -1,0 +1,146 @@
+---
+title: "proyect_inference"
+author: "Santiago_ruiz_navas"
+date: "11/12/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(gridExtra)
+# Running the simulations
+# the would be to 1000 times calculate the average of forthy samples of the exponential distribution.
+theoretical.lambda <- 0.2
+theoretical.mean <- 1/lambda# 5
+mns  <- vector("numeric",1000)
+sample.mean     <- mean(mns)
+sample.lambda   <- 1/sample.mean
+############################################################################
+## first point comparing the theoretical mean against the simulated means.## 
+############################################################################
+for (i in 1 : 1000) mns[i] = mean(rexp(n = 40,rate = lambda))
+g = ggplot(data.frame(means = mns), aes(x= means))
+g = g+geom_histogram(color = "black", fill = "lightblue", binwidth = 0.05 )
+g = g+geom_vline(xintercept = sample.mean, size = 1, colour = "red")
+g = g+geom_vline(xintercept = theoretical.mean, size = 1, colour = "blue")
+g = g+ggtitle(label = "PART 1 Simulation - ponts 1 and 2",
+              subtitle = paste("Theoretical mean =",
+                               theoretical.mean,
+                               " Simulated mean = ",
+                               sample.mean,
+                               "\nTheoretical var = ",
+                               theoretical.var,
+                               " Simulated var = ",
+                               sample.var
+                               ))
+g
+### analysis
+# The simulated mean converged really close to the theoretical, Therefore, the simulated 40 averages of the exponential distributions drawn in this plot comply with the premises of the CTL. 
+############################################################################
+##                   second point comparing variances.                    ## 
+############################################################################
+sample.var      <- 1/sample.lambda^2
+theoretical.var <- 1/lambda^2
+### analysis, almost the same
+############################################################################
+##                   third point comparing distributions.                 ## 
+############################################################################
+exponential <- rexp(n = 1000,rate = lambda)
+g1 = ggplot(data.frame(Exponential = exponential), aes(x= Exponential))
+g1 = g1+geom_histogram(color = "black", fill = "lightblue", binwidth = 0.05 )
+g1 = g1+labs(title = "PART 1 Simulation - Graph 1",
+             subtitle ="Exponential distribution")
+
+g2 = ggplot(data.frame(Means = mns), aes(x= Means))
+g2 = g2+geom_histogram(color = "black", fill = "lightblue", binwidth = 0.05 )
+g2 = g2+labs(title = "PART 1 Simulation - Graph 2",
+                subtitle ="Distribution of the averages of 40 exponentials")
+
+grid.arrange(g1, g2, nrow = 1)
+### Analysis
+# The two graphs show a explicit differences between the distributions. 
+# Graph one shows 1000 samples of an exponential distribution with lambda 0.2
+# Graph two shows 1000 averages of 40 points of a exponential distribution with lambda 0.2. 
+# From these two graphs it is possible to see that graph two resembles an normal distrubution as indicated by the CTL.
+
+#--------------------------------------------------------------------------------------------------------------------
+# PART 2 - Basic Inferential Data Analysis Instructions
+#--------------------------------------------------------------------------------------------------------------------
+data(ToothGrowth)
+summary(ToothGrowth)
+head(ToothGrowth)
+ToothGrowth$dose
+# paired measures, differences between two treatments was positive or not
+## by supp
+data.VC <- subset(ToothGrowth,supp == "VC")
+data.OJ <- subset(ToothGrowth,supp == "OJ")
+
+difference <- data.VC$len-data.OJ$len
+t.test(difference)$conf.int
+
+#Given that the samples were taken from the same patients over a 
+
+#t.test(g2, g1, paired = FALSE, var.equal = TRUE)$conf.int
+t.test(data.VC$len, data.OJ$len, paired = FALSE, var.equal = FALSE)$conf.int
+# For paired the two sided t-test at 95% provides an interval -7.57 and 0.17, the interval includes cero. Therefore, when comparing OJ and VC we fail to reject the null hipothesis and we can not conclude wether OJ or VC have an effect on tooth lenght at 95% of confidence inteval.
+
+## by dose
+data.dose1 <- subset(ToothGrowth,dose == 0.5)
+data.dose2 <- subset(ToothGrowth,dose == 1.0)
+data.dose3 <- subset(ToothGrowth,dose == 2.0)
+
+df12 <- data.dose1$len-data.dose2$len
+df13 <- data.dose1$len-data.dose3$len
+df23 <- data.dose2$len-data.dose3$len
+
+t.test(df12, paired = FALSE, var.equal = FALSE)
+# all negative, therefore dose 2 increses with respecto to dose 1
+# t -6.9
+# p-value super small
+
+t.test(df13, paired = FALSE, var.equal = FALSE)
+# all super negative, therefore dose 3 increses with respecto to dose 1
+# t = -11.291
+# p-value = close to cero
+t.test(df23, paired = FALSE, var.equal = FALSE)
+# t = -4.6
+# p-value = 0.00019
+# all negative, therefore dose 3 increses with respecto to dose 2
+# The dose quantity is proportional to the increase in tooth lenght
+
+# Combining the two analyses it is proposed that whit the current data, we can not say that the type of supp has an effect on tooth grwoth However, it is possible to say that the more doses there are of a treathment the longer the tooth grow. 
+
+
+
+
+
+
+
+mn + c(-1, 1) * qt(.975, n-1) * s / sqrt(n)
+# independent, common variance, differences between two treatments was positive or not
+
+# independent, different variance, differences between two treatments was positive or not
+
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

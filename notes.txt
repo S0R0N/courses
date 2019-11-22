@@ -1,0 +1,111 @@
+
+In statistics analysis one uses the properties of a sample to estimate the characteristics of a population. 
+Additionaly, uses external data to infer from the characteristics of the sample or the population. Like in the example of betting..
+A statistic is an independet variable calculated from the data
+
+STATISTICS: are estimators
+ - An estimator is CONSISTENT if it converges to what it's trying to estimate. The LLN says that the sample mean of iid samples is consistent for the population mean. This is good, right?
+
+
+MEAN is a property of the data also a statistic
+The mean characterizes the center of a distribution
+
+phy:Variability of a sample and a population are different but connected.
+Variability is quantity variability of the numbers in the sample.
+Deviation S: speaks about the variability of the averages of the sample with respect to the population. you can have standard and natural. 
+S: how variable your population is
+S/1/sqrt(n) tells you how variable are averages of samples of size n with respect to your population. 
+The standard error/deviation of a statistic: speaks of the variability of a statistic. 
+
+VARIANCE
+The variance and its square root, the standard deviation, characterize the distribution's spread around the mean.
+Var(X) = E( (X-mu)^2 ) = E( (X-E(X))^2 ) = E(X^2)-E(X)^2
+
+The variance of a sample mean is sigma^2 / n and we estimate it with s^2 / n. It follows that its square root, s /sqrt(n), is the standard error of the sample mean.
+
+The sample standard deviation, s, tells us how variable the population is, and s/sqrt(n), the standard error, tells us how much averages of random
+samples of size n from the population vary.
+
+chebishev: probability that a random variable X is at least k standard deviations from its mean is less than 1/(k^2)
+chebi does not work well on normals. those go with the quantiles. 
+
+
+Standard deviation is sqrt of variance. 
+
+Distributions
+Bernouly: flip of a coin, or yes or no questions. 
+P(X=x) = p^x(1-p)^1-x
+the mean of a bernouly random variable is = p
+the variance is : p(1-p)
+x= 1 is success regardless of the result
+Binomial: comes from iid (idependent results)
+A binomial random variable is obtain as the sum of a bunch of iid bernouly random variables (a sample of iid that comply with bernouly)
+ex: total number of heads of a flip of a biased coin.
+binomial is like a bunch, like a set of bernoulies. like if you want to study sets of bernouly experiements. 
+
+P(X = x) = (n/x)p^x(1-p)^n-x
+
+
+Choose function in R allows you to know the possible combinations wihtout replacement out of a set. like the number of combiantions of characters that compose a password. 
+
+Normal: it is super useful. 
+mean = u
+Variance = sigma^2.
+Standard deviation = sigma
+
+Moving between standard and non standards
+Z non standard =  X-u/sigma            - > non standard to standard
+X is a standard normal = X = u+sigma*Z - > standard to non-standard
+Quantiles for normal
+ - 1.28 (10%) by simmetry (90%)
+ - 1.6  ()
+ - 1.96 (97.5%)
+The connections between normal distribution population and samples are the CTL: 
+ - A sample average is aproximately normally distributed around N(u, sigma^2/n) = N(u, sigma/sqrt(n))
+ - sigma/sqrt(n) sigma from population and n from sample
+
+
+
+it goes with U and standard deviation sd. allows you to know the probability of after random picking one item from your sample what would be the value. for example the prob of getting test score above average. The quantiles tell you the commulative probability over and bellow a point. for example 10th quantile tells you the number where the rest of the sample is lower (charactersitic of the sample).
+Special numbers in the norm distribution 
+
+ - 95% between two standard devs (quantile 2,ie. 2 standard devs)
+ - 68% between one standard dev
+
+To normalize any normal distribution, (X-mu)/sigma/(sqrt(n))
+
+Poisson: to model counts, unbounded
+ - in poisson the mean and the variance are the same lambda. 
+ - Used for contingency tables. 
+ - survivial data
+ - proximation of binomials in large number of pop, small events. 
+The posisson random variables are used to model rates. X = lambdat
+ - Lambda has units over time = is the average number of events per unit time (moths, days, years). 
+ - Lambda is the expected count over unit time. 
+ - T is the total monitoring time.
+
+ASYMPTOTICS is the name for the behaviour of statistics (estimators) when the sample goes to infinity. 
+cummulative average of any distribution would draw eventually a normal distribution. However, it is eventually, we do not know for centantly when eventually. 
+CLT and asymptotics works on big ns
+
+Many sample menas can estimate the population mean
+many sample variances can estimate the population variance
+
+
+CONFIDENCE INTERVALS
+NORMAL distribution
+ - The quantity X' plus or minus 2 sigma/sqrt(n) is called a 95% interval for mu. The 95% says that if one were to repeatedly get samples of size n,  about 95% of the intervals obtained would contain mu, the quantity we're trying to estimate.
+
+Binomial distribution
+ -  A critical point here is that we don't know the true value of p; that's what we're trying to estimate. How can we compute a confidence interval if we don't know p(1-p)? We could be conservative and try to maximize it so we get the largest possible confidence interval. Calculus tells us that p(1-p) is maximized when p=1/2, so we get the biggest 95% confidence interval when we set p=1/2 in the formula p'+/- 2*sqrt(p(1-p)/n).
+
+ - Are used when you do not know the event but know the distribution. Allows you to say what is the confidence expressed in the variability of the distribution, the likelyhood of a sample taking a specific value.
+
+The calculation of the confidence intervals is moving around the distribution.
+Thing is people do it with the normal distribution ecuation as a reference and that sometimes requires the fixs. 
+ - Fix to the problem of having a small n is to use the Agresti/Coull interval 
+ - Agresti/Coull interval - Binomials: adding two successes and two fails. expand the sample by four. for binomials.
+ - Agresti/Coull interval - Possion: augment the monitoring time.
+
+
+ 

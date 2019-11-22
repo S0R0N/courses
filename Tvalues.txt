@@ -1,0 +1,56 @@
+T confidence intervals. They tell me the uncertaintly of my inference. 
+Confidence interval using the central limit theorem
+
+Est+- Z*Q*SEEst
+
+T is about confidence intervals in small samples
+
+Est+- T(tquantile)Q X Standard error of the estimate
+
+The T distribution is different from normal . However, the more data the T becomes like the Z. So, in anycase is safer to use the T. 
+
+T DISTIBUTION - basically for normal shaped distributions
+.
+ - Described by one parameter Degrees of freedom. the more degrees of freedom , the more like a normal it becomes. 
+ - The t quantile is just a quantile in the T distribution. 
+ - The inteval of confidence following a T distribution becomes
+
+X+- t(n-1)*S*sqrt(n) . (tn-1) the relevant quantile. 
+ - So the distribution of the t statistic is independent of the population mean and variance. Instead it depends on the sample size n.
+ - the degrees of freedom are the number of data points you have for your interval. 
+ - if you have 3 then you have to go for 2 and so no. 
+
+ - T interval would work well on simetric and mount distributions. 
+ - for paired observations, i.e., a time serie or temperature, you can analyze the t interval by taking diferences. or differences in the log scale. 
+ - For distributions that are skewed, the spirit of the t interval assumptions are violotated
+ - in this case consider taking logs or using a different summary like median (boostrap confidence intervals?
+
+ - For highly discrete data like binary or poisson, other intervals are available. 
+
+ - To operationalize the calculation of the qunatile T there is a function in R qt(uantile, n-1 degrees of freedom)
+
+ - T values can be used for AB testing (comparing a control set against an experimental one), i.e., when you have various sampling over time of the same object of experiment, like a medical trial or the temperature. 
+ - For independent set of samples there a different formula that involves the expected value of each set. 
+ - Yexp - Xexp +- Tnx-ny-2,1-alpha/2 X (standard error of the difference) Sp(1/nx + 1/ny)^1/2
+ - Y exp is the expected value of the Y set,
+ - Tnx-ny-2 is the number of samples of the set X - ny the number of samples of the set ny and -2. 
+ - Sp, pooled standard deviation is a aproximation of the variance of the two sets to a normal distribution. 
+
+I still do not know what it helps us to calculate when doing the AB testing. 
+
+T range for datasets with unequal variance. (the normal case). The T does not work directly, instead, the degrees of freedom are modified for it to fit the T distribution. 
+T.test (var.eaqual = F)
+
+So from T test I understood
+ - how to get the T test for little samples of a normal distributed dataset
+ - how to get the T test for difference of datasets (you can get the range of differences between two sets in the confidence interval)
+ - You can get the range of the difference of the means of two independent datasets, that is, your experiment against a control. the example he showed it said that the interval of the people that took the contraceptive was -9 <-> 20 so it was possible for it to be 0, therefore, the contraceptive did not had an effect on the pressure. 
+ - accumulated standard error calculation
+ - the fixed degrees of freedom for the cases when the datasets to compare do no have the same variance. 
+
+What I can do
+ - get confidence interval for small size normal distributed datasets
+ - get the confidence interval for datasets over time (their difference) to compare - Datasets have intersubject variability  t.test (pair = True)
+ - get the confidence interval for independent datasets with equal variance of the same (control against medicine)            t.test(var.eaqual = T)
+ - get the confidence interval for independent datasets with different variances (same as before) T.test                      t.test(var.eaqual = F)
+ - an approximate of the variance of the datasets can be seen by plotting them. 

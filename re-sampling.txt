@@ -1,0 +1,16 @@
+Resampling based procedures are ways to perform population based statistical inferences, while living within our data
+ - called bootstrap
+ - I have the sample, but not the population
+ - then what I do is, sample my sample (with replacement) many times and calculate the statistics from those samples. 
+ - We use our data, our observed data. To construct an estimated population distribution, we simulate from that population distribution to figure out the distribution, of a statistic that we're interested it
+ - After reconstructing the boostraped distribution, you can operate over it and calculate confidence intervals and other statistics. 
+
+Nonparametric bootstrp algorithm example
+ - sample n observations with replacement from the observed data. 
+ - take the median of the simulated data set
+ - you repeat this process B times, where B is the number of bootstrapping. 
+ - B bigger than 10.000
+ - get those medians or calculated statistics and draw an histogram. 
+ - calculate their sd 
+ - take the 2.5 and 97.5 (both sided. 95% interval) as a confidence interval for the median. bootstrap confidence for the median. 
+ - Improved confidence interval using BCA. Bias-corrected and accelerated interval 

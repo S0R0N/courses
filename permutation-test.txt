@@ -1,0 +1,5 @@
+Permutation tests
+ - group comparison
+ - is like calculating many times (using samples of my sample without categorization - breaking the categories) a statistic, and getting the extreme values. 
+ - the previous under the null hipothesis that our labels have nothing to do with my outcome
+ - if any of the permutations is not bigger than the observed data, then the observed data is strong

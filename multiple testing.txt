@@ -1,0 +1,37 @@
+It is about making various hipothesis tests. 
+ - before multiple testing, you have to make some corrections. 
+ - Two measures
+ - - Error measure
+ - - Correction
+
+Error measures
+ - V false positives
+ - False positive rate : the rate when false resuts are called significant E(V/m0)
+ - Family wise error: The probability of at least one false positive (Pr(V>=1))
+ - False discovery rate(FDR): the rate at which claims of significance  are false E(V/R)
+ - Why is relevant, in signal processing or word relationships, you can do lots of hipothesis tests, if you control the error rate only with alpha
+ - it would be possible that alpha still allows lots of false positives. 
+
+Procedoure to control the error measures
+ - bonferroni correction for family wise error: static threshold
+ - - m tests.
+ - - control FWER at an alpha level. (Pr(V>=1)<alpha)
+ - - Calculate the p values normaly
+ - - set alpha fwer = alpha/m
+ - - call all the p-values less than alpha fwer significant. 
+ - Controlling false discovery rate: proportional to the number of tests - BENJAMINY HARPER
+ - - suppose you do m tests. 
+ - - control FDR at an alpha level, so E(V/R)> alpha
+ - - Calculate p-values normally
+ - - order the p-values from smallest to largets P(1), ..., P(m)
+ - - call any P(i)<= alpha*i/m, significant
+ - - might behave strangely under dependence
+ - Adjust the p-values
+ - - after you adjust p-values, they are no longer p-values. 
+ - - claculate m * each p value and set it to a maximum of 1, i.e., adjusted p-valus can not be bigger than 1. 
+ - - then with the transofrmation you can calculate the times P-valuei fwer <alpha directly. 
+
+CALCULATION
+p.adjust(vector of p-values, method = "bonferroni")< 0.05
+
+p/adjust(vector of p-values, method = "BH")< 0.05
