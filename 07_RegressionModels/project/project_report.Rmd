@@ -1,0 +1,122 @@
+---
+title: 'Peer-graded Assignment: Regression Models Course Project'
+author: "Santiago ruiz navas"
+date: "11/26/2019"
+toc: true
+output: html_document
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## OVERVIEW
+
+1. Executive summary        [abstract]
+2. Exploratory analysis     [summary, boxplot]
+3. Model selection strategy [overview]
+    * Model evaluation      [anova&simpsom]
+    * Inference             [confidence interval for the coeficients]
+4. Answer to the questions  [answer the questions]
+5. Assumptions              [Assumptions]
+
+
+
+## EXECUTIVE SUMMARY
+This report presents the answers to two research questions
+ - “Is an automatic or manual transmission better for "Milles (US) per Gallon” (MPG)
+ - "Quantify the MPG difference between automatic and manual transmissions"
+ The questions will be answered using the dataset mtcars and skills learned in the linear regression course.
+ We did three steps to solve these questions
+  - Exploratory analysis to check the corelations between the variables
+  - nested various models and evalauted them using anova and simpsom tests
+  - selected two models one conservative and other more relaxed to evalute the research questions
+  In conclusion the use of automatic or manual transmision does not have a significant effect in MPG. The avearage different quantity of mpg related to using automatic or manual tranmision was in the relaxed model of xxx with an interval of xxx and in the conservative model of xxx with an interval of xxx. Additionaly, the consideration of other variables available in the dataset seriously affects the coeficient of the automatic and manual tranmision in the model.
+  
+## EXPLORATORY ANALYSIS 
+ 
+ Loading data & libraries
+ ```{r loading,echo=T}
+library(ggplot2) 
+data("expA_loading data")
+```
+ Summary of data
+ ```{r expA_summary,echo=T}
+summary(mtcars)
+```
+visualizing the differences between auotmatic or manual transmision and MPG
+```{r expA_boxplot,echo=F}
+p <- ggplot(mtcars, aes(x=as.factor(mtcars$am), y=mtcars$mpg)) + 
+  geom_boxplot()+ labs(title="Plot of mpg per automatic or manual transmision", x="AM (A = 1, M = 0)", y = "MPG")
+p # there is a visible difference in mpgs when using automatic vs manual
+```
+From the graph above it is possible to see a difference. However, one questions emerge:
+    * is this difference significant regaring the other variables in the dataset?
+
+## is this difference significant?
+### Quick one variable analysis
+Preparing the predictor variable as a factor
+```{r expA_onevar,echo=TRUE}
+mtcars$am <- as.factor(mtcars$am)
+mdl.project <- lm(mpg ~ am, mtcars)
+```
+Looking at the slope to see the difference in mpgs between using auto or manual transmision
+```{r expA_onevar.sum,echo=T}
+summary(mdl.project)$coef
+```
+The coeficient seem correctand the difference significative with manual mpg goes up. 
+Now the model is tested using the anova and shapiro tests to see if this conclusion is based in a solid model.
+```{r expA_onevar.eval,echo=T}
+anova(mdl.project)# okay
+# checking for the normality of the coeficients
+shapiro.test(mdl.project$residuals)
+# can not deny the null hipothesis then the residuals are normal! win
+```
+Finally lets see the confidence interval for the calculated coeficient
+```{r expA_onevar.inf,echo=T}
+coef.statistics <- summary(mdl.project)$coef
+B1.interval <- coef.statistics[2,1] +c(-1,1)*qt(.975, df = mdl.project$df)*coef.statistics[2,2]# 
+```
+The 95% interval for B1 was above cero. Therfore,  is signficative. 
+
+### Quick Nested model analysis
+The strategy for model selection is nested analysis. I will check the corelations between the predictor AM and the other variables of the dataset, and in the order of the magnitud of their correlations will create nested models and evaluate them.The justification for this corelation-based-policy is that, the more correlation another predictor has with AM the more impact it will have on its regressed coeficient. Furthremore, the criteria to select a model is based on how "strong" (p-value) they pass the anova and shapiro tests.
+  * The evaluation of a model consits in running anova and shapiro tests.
+  * The "strengh" of a model is proportional to the significance in which it passes the tests. e.g., given mdl1 and mdl2, if mdl 1 passes anova and shapiro with a 95% of significance and mdl2 with 90% then mdl1 is stronger than mdl2.
+
+#### getting the correlations of AM
+```{r expA_mvar.cor,echo=T}
+data("mtcars")
+mtcars.cor <- cor(mtcars)
+am.cor <- sort(abs(mtcars.cor[,"am"]), decreasing = T)
+```
+The order showed by the vector am is followed to test the nested models
+
+### TESTING NESTED MODELS
+Three iterations were made. However, only the firs will be shown because of space constrain 
+
+### RESULTS of nested models
+After the three iterations the model mpg ~ am + gear + drat + wt + cyl was selected with anova p-value of xxx and saphiro p-value of xx. Bellow the results of the three iterations is explained
+  * In the first iteration all variables were nested, after the evalaution the varible disp was removed. 
+  * In the second iteration hp was removed.
+  * In the third iteration qsec was removed and the best model based on its anova and saphiro tests results was selected
+  
+### INFERENCE 
+Calcualting the inference interval for the B1
+B1 of the selected model was 1.301 with interval of -2.46 and 5.06 (mpgs)
+The interval includes cero, therefore it is considered that the difference is not significant. 
+
+## CONCLUSION
+ANSWER TO QUESTION 1:
+The interval of the B1 for the selected model was tested at a 95% t-test and it contained cero. Therefore, taking into account other variables in the dataset, AM does not have a significant effect on mpg
+ANSWER TO QUESTION 2:
+B1 1.301mpg increse when using manual over auto, with interval of -2.46 and 5.06 (mpgs)
+
+## LIMITATIONS
+In this approach only three iterations of one set of possible combinations of the variables was done, in a future study all the other possible combinations of the variables can be explored to find the best possbile model and with re-evaluate the answer to these question.
+
+## ASSUMPTIONS
+The assumptions to compare binary values using linear regressions are that
+  * The samples of the compared values were idepedent iid
+  * The variances of the compared variables were equal

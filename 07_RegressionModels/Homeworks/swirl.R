@@ -9,3 +9,6 @@ swirl()
 # the multiplied model tells me about their interaction
 
 ## Outliers
+
+## SWIRL for GLM
+swirl()

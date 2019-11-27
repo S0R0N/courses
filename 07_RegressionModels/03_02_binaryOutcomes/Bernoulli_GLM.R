@@ -27,10 +27,22 @@
 ## Pr probability
 ##
 # INTERPRETATION
-## B0 = probability of win With RS =0 (the intercept) i.e., the log odds of a raven wins if they score cero points
-## B1 = The the log odds ratio of win probability for each increment in score (compared ot zero points)
-## exp(B1) = Odds ratio of win probability for each point scored (compared to zero points)
+## MODEL OF ONE BINARY VS CONTINOUS
+## - B0 = probability of win With RS =0 (the intercept) i.e., the log odds of a raven wins if they score cero points
+## - B1 = The the log odds ratio of win probability for each increment in score (compared ot zero points)
+## - exp(B1) = Odds ratio of win probability for each point scored (compared to zero points)
+## MODEL OF ONE BINARY VS BINARY
+## - Only intercept then it becomes the log odds of the poblation(Y) being Y= success
+## - One binary predictor: 
+## - - B0 becomes the log odds of Y= success given the predictor(X1) = 0
+## - - B1 becomes the ratio of log odds of X1 = success (1) / X1 = Fail (0) -> given Y = success 
+## - - so you could get the log odd of predictor (X1) =1 by B0*B1
+ 
 
+## EVALUATION
+## ANOVA, it gives the resid. dev between the models and a deviance value. 
+## to know if that deviance value is significant you have to qchisq(0.95, df) 
+## DF is the difference between the predictors used in the models
 download.file("https://dl.dropboxusercontent.com/u/7710864/data/ravensData.rda"
               , destfile="./data/ravensData.rda",method="curl")
 load("./data/ravensData.rda")

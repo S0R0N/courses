@@ -14,10 +14,22 @@
 ## - obvious like sinonims or anotnyms to the predicted variable. hot and cold. tall and short. 
 ## - Variance Inflation Factor (VIF) to get a proxy of variance inflation
 ## - VIF: shows you the relation between what you have Vs the ideal case. for real variance
+## - For each regression coefficient, the variance inflation due to including all the others.
+## - For instance, the variance in the estimated coefficient of Education is 2.774943 times what it might have
+## - been if Education were not correlated with the other regressors
 
 # VARIANCE INFLATION in the ESTIMATED VARIANCE
 # so if you overfit or correctly model you get little variance. 
 # However, the variance of the estimated variance will be inflated. 
+
+# ANOVA - nested models for model evaluation
+# uses an F statistic to evaluate the null hipothesis on the new predictors added to a model
+# F statistic is a ratio of two sums of squares divided by their respective degrees of freedom
+# F statistic is equal to deviance(fit3)/43 || deviance(fit1)-deviance(fit3)/(number of additional predictors in fit 3)
+# 43 us the degrees of freedom of fit 3 meaning the number of data vs the regressors 3 plus the intercept
+# HOWEVER, Analysis of variance is sensitive to its assumption that model residuals are approximately normal
+# SOLUTION: The Shapiro-Wilk test - shapiro.test(fit3$residuals)
+# SHAPIRO-WILK: has as null hipo normality therefore, failing to reject it is cool!
 
 # AUTOMATED MODEL SELECTION
 # is in machine learning now. 
@@ -69,7 +81,6 @@ vif(fit)
 sqrt(vif(fit)) #I prefer sd 
 
 # EXMAPLE OF NESTED MODELS
-
 fit1 <- lm(Fertility ~ Agriculture, data = swiss)
 fit3 <- update(fit1, Fertility ~ Agriculture + Examination + Education)
 fit5 <- update(fit3, Fertility ~ Agriculture + Examination + Education + Catholic + Infant.Mortality)
